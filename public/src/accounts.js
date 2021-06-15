@@ -1,7 +1,3 @@
-const books = require('../../test/fixtures/books.fixture');
-const accounts = require('../../test/fixtures/accounts.fixture');
-const authors = require('../../test/fixtures/authors.fixture');
-
 function findAccountById(accounts, id) {
   return Object.values(accounts).find((account) => account.id === id);
 }
