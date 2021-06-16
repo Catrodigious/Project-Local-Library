@@ -14,20 +14,16 @@ function getTotalNumberOfBorrows(account, books) {
 
 
 // return an array of books and authors that represent all books currently checked out by the given account
-// alter the borrowed object to contain the author property
-function getBooksPossessedByAccount(account, books, authors) {
-  return books.reduce((borrowed, book)=>{
-    // check if book has been checked out
-    const borrowedBook = book.borrows.some((book)=> book.id === account.id && book.returned === false);
-    
-    if (borrowedBook) borrowed.push(book);
-    if (borrowed){
-      return borrowed.map((bookObj)=>{
-        bookObj.author = authors.find((author)=>author.id === bookObj.authorId);
-        return bookObj;
-      })
+// embed the author object
+function getBooksPossessedByAccount(account, books, authors){
+  return books.reduce((acc, book)=>{
+    let checkedOut = book.borrows.some((borrower)=> borrower.id === account.id && !borrower.returned);
+    if (checkedOut){
+      let author = authors.find((auth)=>auth.id === book.authorId);
+      acc.push({...book, author});
     }
-  },[])
+    return acc;
+  }, [])
 }
 
 module.exports = {

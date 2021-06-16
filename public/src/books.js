@@ -14,27 +14,17 @@ function findBookById(books, id) {
 // bookStatus[1] === books returned (not checked out)
 function partitionBooksByBorrowedStatus(books) {
   return books.reduce((bookStatus, book)=>{
-    if (!book.borrows[0].returned) 
-      bookStatus[0].push(book)
-    else 
-      bookStatus[1].push(book);
-    
+    !book.borrows[0].returned ? bookStatus[0].push(book) : bookStatus[1].push(book);
     return bookStatus;
   }, [[],[]])
 }
 
 // the tests want at most 10 accounts/*
 function getBorrowersForBook(book, accounts) {
-  return book.borrows.reduce((borrowers, borrowed)=>{
-    let borrower = accounts.find((account)=> borrowed.id === account.id);
-    if (borrower && borrowers.length < 10){
-      borrower.returned = borrowed.returned;
-      borrowers.push(borrower);
-    }
-    return borrowers;
-  }, [])
+  return book.borrows.map((borrower)=>{
+    return {...accounts.find((acc)=> acc.id === borrower.id), returned: borrower.returned};
+  }).slice(0, 10);
 }
-
 
 module.exports = {
   findAuthorById,
